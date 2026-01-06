@@ -1,6 +1,6 @@
 blueprint:
   name: Robb smarrt 4-button switch
-  description:  |
+  description: |
     This blueprint is for the  Robb smarrt 4-button switch panel (ROBB ROB_200-008-0) when used with zha.
     It is for general use so all buttons can be connected to any action of your choice. This remote supports short button clicks and long button presses (over 4 seconds)
     Make sure to select the correct sensor for the remote.
@@ -14,7 +14,7 @@ blueprint:
         device:
           integration: zha
           model: "ROB_200-008-0"
-          
+
     on_button_1_short:
       name: On button 1 - short
       default: []
@@ -64,12 +64,12 @@ trigger:
     event_type: zha_event
     event_data:
       device_id: !input "remote"
-  
+
 action:
   - variables:
-      button: '{{ trigger.event.data.endpoint_id }}'
-      cmd: '{{ trigger.event.data.command }}'
-      args: '{{ trigger.event.data.args }}'
+      button: "{{ trigger.event.data.endpoint_id }}"
+      cmd: "{{ trigger.event.data.command }}"
+      args: "{{ trigger.event.data.args }}"
   - choose:
       - conditions:
           - "{{ button == 1 and cmd == 'on' }}"
@@ -82,11 +82,17 @@ action:
         sequence:
           - if:
               - condition:
-                - '{{ args[11] == "U" }}'
-            then: 
-                !input "on_button_1_long"
-            else:
-                !input "off_button_1_long"
+                  - '{{ args[11] == "U" }}'
+            then: !input "on_button_1_long"
+      - conditions:
+          - '{{ button == 1 and cmd == "move" }}'
+        sequence:
+          - variables:
+              mode: "{{ trigger.event.data.params.move_mode }}"
+          - if:
+              - condition:
+                  - '{{ mode == "MoveMode.Down" }}'
+            then: !input off_button_1_long
 
       - conditions:
           - "{{ button == 2 and cmd == 'on' }}"
@@ -99,8 +105,6 @@ action:
         sequence:
           - if:
               - condition:
-                - '{{ args[11] == "U" }}'
-            then: 
-                !input "on_button_2_long"
-            else:
-                !input "off_button_2_long"
+                  - '{{ args[11] == "U" }}'
+            then: !input "on_button_2_long"
+            else: !input "off_button_2_long"
