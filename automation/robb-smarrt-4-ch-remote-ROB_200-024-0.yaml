@@ -35,7 +35,7 @@ blueprint:
           multiple: false
     robb_4ch_remote_state:
       name: Robb 4CH Remote State
-      description: 'input_text entity to store remote state and event history'
+      description: "input_text entity to store remote state and event history"
       selector:
         entity:
           domain: input_text
@@ -168,9 +168,9 @@ trigger:
       device_id: !input remote
 action:
   - variables:
-      now: '{{ now() | as_timestamp }}'
-      button: '{{ trigger.event.data.endpoint_id | int }}'
-      cmd: '{{ trigger.event.data.command }}'
+      now: "{{ now() | as_timestamp }}"
+      button: "{{ trigger.event.data.endpoint_id | int }}"
+      cmd: "{{ trigger.event.data.command }}"
       robb_4ch_remote_state: !input robb_4ch_remote_state
       # Load state, fallback to empty
       state: >-
@@ -232,7 +232,7 @@ action:
         sequence: !input on_button_1_short
       - conditions: '{{ not is_double_event and not is_all_command and button == 1 and cmd == "off" }}'
         sequence: !input off_button_1_short
-      - conditions: '{{ not is_double_event and not is_all_command and button == 1 and cmd == "move_with_on_off" }}'
+      - conditions: '{{ not is_double_event and not is_all_command and button == 1 and cmd == "move_with_on_off" or cmd == "move" }}'
         sequence:
           - variables:
               mode: '{{ trigger.event.data.params.move_mode | default("") }}'
@@ -284,18 +284,18 @@ action:
       - conditions: '{{ not is_double_event and not is_all_command and button == 1 and cmd == "recall" }}'
         sequence:
           - variables:
-              sbutton: '{{ trigger.event.data.params.scene_id | default(0) }}'
+              sbutton: "{{ trigger.event.data.params.scene_id | default(0) }}"
           - choose:
-              - conditions: '{{ sbutton == 1 }}'
+              - conditions: "{{ sbutton == 1 }}"
                 sequence: !input s1_button_short
-              - conditions: '{{ sbutton != 1 }}'
+              - conditions: "{{ sbutton != 1 }}"
                 sequence: !input s2_button_short
       - conditions: '{{ not is_double_event and not is_all_command and button == 1 and cmd == "store" }}'
         sequence:
           - variables:
-              sbutton: '{{ trigger.event.data.params.scene_id | default(0) }}'
+              sbutton: "{{ trigger.event.data.params.scene_id | default(0) }}"
           - choose:
-              - conditions: '{{ sbutton == 1 }}'
+              - conditions: "{{ sbutton == 1 }}"
                 sequence: !input s1_button_long
-              - conditions: '{{ sbutton != 1 }}'
+              - conditions: "{{ sbutton != 1 }}"
                 sequence: !input s2_button_long
