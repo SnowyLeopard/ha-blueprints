@@ -232,7 +232,7 @@ action:
         sequence: !input on_button_1_short
       - conditions: '{{ not is_double_event and not is_all_command and button == 1 and cmd == "off" }}'
         sequence: !input off_button_1_short
-      - conditions: '{{ not is_double_event and not is_all_command and button == 1 and cmd == "move_with_on_off" or cmd == "move" }}'
+      - conditions: '{{ not is_double_event and not is_all_command and button == 1 and (cmd == "move_with_on_off" or cmd == "move") }}'
         sequence:
           - variables:
               mode: '{{ trigger.event.data.params.move_mode | default("") }}'
@@ -245,7 +245,7 @@ action:
         sequence: !input on_button_2_short
       - conditions: '{{ not is_double_event and not is_all_command and button == 2 and cmd == "off" }}'
         sequence: !input off_button_2_short
-      - conditions: '{{ not is_double_event and not is_all_command and button == 2 and cmd == "move_with_on_off" }}'
+      - conditions: '{{ not is_double_event and not is_all_command and button == 2 and (cmd == "move_with_on_off" or cmd == "move") }}'
         sequence:
           - variables:
               mode: '{{ trigger.event.data.params.move_mode | default("") }}'
@@ -258,7 +258,7 @@ action:
         sequence: !input on_button_3_short
       - conditions: '{{ not is_double_event and not is_all_command and button == 3 and cmd == "off" }}'
         sequence: !input off_button_3_short
-      - conditions: '{{ not is_double_event and not is_all_command and button == 3 and cmd == "move_with_on_off" }}'
+      - conditions: '{{ not is_double_event and not is_all_command and button == 3 and (cmd == "move_with_on_off" or cmd == "move") }}'
         sequence:
           - variables:
               mode: '{{ trigger.event.data.params.move_mode | default("") }}'
@@ -271,7 +271,7 @@ action:
         sequence: !input on_button_4_short
       - conditions: '{{ not is_double_event and not is_all_command and button == 4 and cmd == "off" }}'
         sequence: !input off_button_4_short
-      - conditions: '{{ not is_double_event and not is_all_command and button == 4 and cmd == "move_with_on_off" }}'
+      - conditions: '{{ not is_double_event and not is_all_command and button == 4 and (cmd == "move_with_on_off" or cmd == "move") }}'
         sequence:
           - variables:
               mode: '{{ trigger.event.data.params.move_mode | default("") }}'
