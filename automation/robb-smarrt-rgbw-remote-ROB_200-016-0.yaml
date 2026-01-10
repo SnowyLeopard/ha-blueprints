@@ -268,6 +268,30 @@ action:
           data:
              brightness_step: 13
 
+  # Switch light on
+  - conditions:
+    - '{{ cmd == "on" }}'
+    sequence:
+    - choose:
+      - conditions:
+        - '{{ group == 1 }}'
+        sequence:
+        - service: light.turn_on
+          target:
+             entity_id: !input light_group_1
+      - conditions:
+        - '{{ group == 2 }}'
+        sequence:
+        - service: light.turn_on
+          target:
+             entity_id: !input light_group_2
+      - conditions:
+        - '{{ group == 3 }}'
+        sequence:
+        - service: light.turn_on
+          target:
+             entity_id: !input light_group_3
+
   # Switch light off
   - conditions:
     - '{{ cmd == "off" }}'
@@ -291,7 +315,6 @@ action:
         - service: light.turn_off
           target:
              entity_id: !input light_group_3
-
   
   # Update light light level - step down
   - conditions:
