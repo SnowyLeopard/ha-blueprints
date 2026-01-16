@@ -25,8 +25,12 @@ blueprint:
       description: RGBW remote to use
       selector:
         device:
-          integration: zha
-          model: ROB_200-016-0
+          filter:
+          - integration: zha
+            model: ROB_200-016-0
+          - integration: zha
+            model: ZG2858A
+          multiple: false
 
     light_group_1:
       name: Light group 1
