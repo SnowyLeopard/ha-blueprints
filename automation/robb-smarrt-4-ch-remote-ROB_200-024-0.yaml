@@ -177,7 +177,7 @@ action:
           {{ trigger.event.data.command }}
         {% endif %}
       cmd_value: >-
-        {% if triggers.event.data.args.attribute_value %}
+        {% if trigger.event.data.args.attribute_value %}
           {{ trigger.event.data.args.attribute_value | default("-1") | int }}
         {% elif trigger.event.data.params.move_mode %}
           {{ trigger.event.data.params.move_mode | default("-1") | int }}
