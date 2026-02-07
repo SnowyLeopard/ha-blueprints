@@ -179,9 +179,9 @@ action:
       cmd_value: >-
         {% if triggers.event.data.args.attribute_value %}
           {{ trigger.event.data.args.attribute_value | default("-1") | int }}
-        {% else if trigger.event.data.params.move_mode %}
+        {% elif trigger.event.data.params.move_mode %}
           {{ trigger.event.data.params.move_mode | default("-1") | int }}
-        {% else if trigger.event.data.params.scene_id %}
+        {% elif trigger.event.data.params.scene_id %}
           {{ trigger.event.data.params.scene_id | default(0) | int }}
         {% else %}
           -1
