@@ -176,7 +176,16 @@ action:
         {% else %}
           {{ trigger.event.data.command }}
         {% endif %}
-      cmd_value: '{{ trigger.event.data.args.attribute_value | default("-1") | int }}'
+      cmd_value: >-
+        {% if triggers.event.data.args.attribute_value %}
+          {{ trigger.event.data.args.attribute_value | default("-1") | int }}
+        {% else if trigger.event.data.params.move_mode %}
+          {{ trigger.event.data.params.move_mode | default("-1") | int }}
+        {% else if trigger.event.data.params.scene_id %}
+          {{ trigger.event.data.params.scene_id | default(0) | int }}
+        {% else %}
+          -1
+        {% endif %}
       robb_4ch_remote_state: !input robb_4ch_remote_state
       # Load state, fallback to empty
       state: >-
@@ -226,12 +235,10 @@ action:
         sequence: !input off_button_all_short
       - conditions: '{{ is_all_command and cmd == "move_with_on_off" }}'
         sequence:
-          - variables:
-              mode: '{{ trigger.event.data.params.move_mode | default("-1") | int }}'
           - choose:
-              - conditions: '{{ mode == 0 }}'
+              - conditions: '{{ cmd_value == 0 }}'
                 sequence: !input on_button_all_long
-              - conditions: '{{ mode == 1 }}'
+              - conditions: '{{ cmd_value == 1 }}'
                 sequence: !input off_button_all_long
       # Regular buttons (only if not in all sequence)
       - conditions: '{{ not is_double_event and not is_all_command and button == 1 and cmd == "on_off" and cmd_value == 1 }}'
@@ -240,12 +247,10 @@ action:
         sequence: !input off_button_1_short
       - conditions: '{{ not is_double_event and not is_all_command and button == 1 and (cmd == "move_with_on_off" or cmd == "move") }}'
         sequence:
-          - variables:
-              mode: '{{ trigger.event.data.params.move_mode | default("-1") | int }}'
           - choose:
-              - conditions: '{{ mode == 0 }}'
+              - conditions: '{{ cmd_value == 0 }}'
                 sequence: !input on_button_1_long
-              - conditions: '{{ mode == 1 }}'
+              - conditions: '{{ cmd_value == 1 }}'
                 sequence: !input off_button_1_long
       - conditions: '{{ not is_double_event and not is_all_command and button == 2 and cmd == "on_off" and cmd_value == 1 }}'
         sequence: !input on_button_2_short
@@ -253,12 +258,10 @@ action:
         sequence: !input off_button_2_short
       - conditions: '{{ not is_double_event and not is_all_command and button == 2 and (cmd == "move_with_on_off" or cmd == "move") }}'
         sequence:
-          - variables:
-              mode: '{{ trigger.event.data.params.move_mode | default("-1") | int }}'
           - choose:
-              - conditions: '{{ mode == 0 }}'
+              - conditions: '{{ cmd_value == 0 }}'
                 sequence: !input on_button_2_long
-              - conditions: '{{ mode == 1 }}'
+              - conditions: '{{ cmd_value == 1 }}'
                 sequence: !input off_button_2_long
       - conditions: '{{ not is_double_event and not is_all_command and button == 3 and cmd == "on_off" and cmd_value == 1 }}'
         sequence: !input on_button_3_short
@@ -266,12 +269,10 @@ action:
         sequence: !input off_button_3_short
       - conditions: '{{ not is_double_event and not is_all_command and button == 3 and (cmd == "move_with_on_off" or cmd == "move") }}'
         sequence:
-          - variables:
-              mode: '{{ trigger.event.data.params.move_mode | default("-1") | int }}'
           - choose:
-              - conditions: '{{ mode == 0 }}'
+              - conditions: '{{ cmd_value == 0 }}'
                 sequence: !input on_button_3_long
-              - conditions: '{{ mode == 1 }}'
+              - conditions: '{{ cmd_value == 1 }}'
                 sequence: !input off_button_3_long
       - conditions: '{{ not is_double_event and not is_all_command and button == 4 and cmd == "on_off" and cmd_value == 1 }}'
         sequence: !input on_button_4_short
@@ -279,29 +280,23 @@ action:
         sequence: !input off_button_4_short
       - conditions: '{{ not is_double_event and not is_all_command and button == 4 and (cmd == "move_with_on_off" or cmd == "move") }}'
         sequence:
-          - variables:
-              mode: '{{ trigger.event.data.params.move_mode | default("-1") | int }}'
           - choose:
-              - conditions: '{{ mode == 0 }}'
+              - conditions: '{{ cmd_value == 0 }}'
                 sequence: !input on_button_4_long
-              - conditions: '{{ mode == 1 }}'
+              - conditions: '{{ cmd_value == 1 }}'
                 sequence: !input off_button_4_long
       # S1/S2
       - conditions: '{{ not is_double_event and not is_all_command and button == 1 and cmd == "recall" }}'
         sequence:
-          - variables:
-              sbutton: "{{ trigger.event.data.params.scene_id | default(0) }}"
           - choose:
-              - conditions: "{{ sbutton == 1 }}"
+              - conditions: "{{ cmd_value == 1 }}"
                 sequence: !input s1_button_short
-              - conditions: "{{ sbutton != 1 }}"
+              - conditions: "{{ cmd_value != 1 }}"
                 sequence: !input s2_button_short
       - conditions: '{{ not is_double_event and not is_all_command and button == 1 and cmd == "store" }}'
         sequence:
-          - variables:
-              sbutton: "{{ trigger.event.data.params.scene_id | default(0) }}"
           - choose:
-              - conditions: "{{ sbutton == 1 }}"
+              - conditions: "{{ cmd_value == 1 }}"
                 sequence: !input s1_button_long
-              - conditions: "{{ sbutton != 1 }}"
+              - conditions: "{{ cmd_value != 1 }}"
                 sequence: !input s2_button_long
