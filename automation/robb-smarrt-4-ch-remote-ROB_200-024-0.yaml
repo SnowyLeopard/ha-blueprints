@@ -170,7 +170,12 @@ action:
   - variables:
       now: '{{ now() | as_timestamp }}'
       button: '{{ trigger.event.data.endpoint_id | int }}'
-      cmd: '{{ trigger.event.data.args.attribute_name | default("") }}'
+      cmd: >-
+        {% if trigger.event.data.command == 'attribute_updated' %}
+          {{ trigger.event.data.args.attribute_name}}
+        {% else %}
+          {{ trigger.event.data.command }}
+        {% endif %}
       cmd_value: '{{ trigger.event.data.args.attribute_value | default("-1") | int }}'
       robb_4ch_remote_state: !input robb_4ch_remote_state
       # Load state, fallback to empty
