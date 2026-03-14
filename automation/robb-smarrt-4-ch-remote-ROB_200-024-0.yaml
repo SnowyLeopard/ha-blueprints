@@ -177,11 +177,11 @@ action:
           {{ trigger.event.data.command }}
         {% endif %}
       cmd_value: >-
-        {% if trigger.event.data.args.attribute_value %}
+        {% if trigger.event.data.args.attribute_value is defined %}
           {{ trigger.event.data.args.attribute_value | int }}
-        {% elif trigger.event.data.params.move_mode %}
+        {% elif trigger.event.data.params.move_mode is defined %}
           {{ trigger.event.data.params.move_mode | int }}
-        {% elif trigger.event.data.params.scene_id %}
+        {% elif trigger.event.data.params.scene_id is defined %}
           {{ trigger.event.data.params.scene_id | int }}
         {% else %}
           -1
